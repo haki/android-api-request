@@ -98,12 +98,10 @@ public class MainActivity extends AppCompatActivity {
     private void setUrl(Location location) throws IOException {
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-        String countryName = addresses.get(0).getCountryName();
-        countryName = countryName.toLowerCase();
-        countryName = Normalizer.normalize(countryName, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+        String fullAddress = addresses.get(0).getAddressLine(0);
 
         String url = "https://api.openweathermap.org/data/2.5/forecast?lat=" + location.getLatitude() + "&lon=" + location.getLongitude() + "&appid={your api key}";
-        Toast.makeText(this, "Country: " + countryName, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Address: " + fullAddress, Toast.LENGTH_SHORT).show();
         RequestQueue queue = Volley.newRequestQueue(this);
 
         final StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
