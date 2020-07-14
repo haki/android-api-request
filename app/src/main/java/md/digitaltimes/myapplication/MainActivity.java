@@ -98,13 +98,12 @@ public class MainActivity extends AppCompatActivity {
     private void setUrl(Location location) throws IOException {
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-        String cityName = addresses.get(0).getLocality();
-        cityName = cityName.toLowerCase();
-        cityName = Normalizer.normalize(cityName, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
-        Toast.makeText(this, "City: " + cityName, Toast.LENGTH_SHORT).show();
+        String countryName = addresses.get(0).getCountryName();
+        countryName = countryName.toLowerCase();
+        countryName = Normalizer.normalize(countryName, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
 
-        String url = "https://api.openweathermap.org/data/2.5/forecast?q=" + cityName + "&appid=912ed8064a700fd14d60fb607a1e2aba";
-        Toast.makeText(this, "City: " + cityName, Toast.LENGTH_SHORT).show();
+        String url = "https://api.openweathermap.org/data/2.5/forecast?lat=" + location.getLatitude() + "&lon=" + location.getLongitude() + "&appid={your api key}";
+        Toast.makeText(this, "Country: " + countryName, Toast.LENGTH_SHORT).show();
         RequestQueue queue = Volley.newRequestQueue(this);
 
         final StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
@@ -129,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
                             copyData = parts[0];
                             stringBuilder.append("\nDate: " + parts[0])
                                     .append("\nDescription: " + getDescription(jsonArray.getJSONObject(i)))
-                                    .append("\nTemp: " + df2.format(temp) + "C\n");
+                                    .append("\nFeels Like: " + df2.format(temp) + "C\n");
                         }
                     }
                     textView.setVisibility(0);
